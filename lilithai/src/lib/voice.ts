@@ -60,7 +60,7 @@ export async function joinUserVoice(member: GuildMember): Promise<SessionState> 
   });
 
   try {
-    await entersState(connection, VoiceConnectionStatus.Ready, 20000);
+    await entersState(connection, VoiceConnectionStatus.Ready, 45000);
   } catch (e: any) {
     console.error("[voice] entersState Ready failed:", e?.message, e);
     try { connection.destroy(); } catch {}
