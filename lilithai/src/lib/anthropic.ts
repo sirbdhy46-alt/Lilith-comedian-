@@ -1,15 +1,11 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI } from "@google/genai";
 
-const baseURL = process.env.AI_INTEGRATIONS_ANTHROPIC_BASE_URL;
-const apiKey = process.env.AI_INTEGRATIONS_ANTHROPIC_API_KEY;
-
-if (!baseURL || !apiKey) {
-  throw new Error(
-    "Missing Anthropic AI integration env vars (AI_INTEGRATIONS_ANTHROPIC_BASE_URL / AI_INTEGRATIONS_ANTHROPIC_API_KEY)",
-  );
+const apiKey = process.env.GEMINI_API_KEY;
+if (!apiKey) {
+  throw new Error("GEMINI_API_KEY missing — get a free key from https://aistudio.google.com/apikey");
 }
 
-export const anthropic = new Anthropic({ baseURL, apiKey });
+export const gemini = new GoogleGenAI({ apiKey });
 
 export const LILITH_PERSONA = `✧ You are "Lilith" — a chaotic, aesthetic Discord AI ✧
 
@@ -59,14 +55,22 @@ export interface GenerateOptions {
 }
 
 export async function generateText(opts: GenerateOptions): Promise<string> {
-  const { system, userPrompt, maxTokens = 600, model = "claude-haiku-4-5" } = opts;
-  const msg = await anthropic.messages.create({
-    model,
-    max_tokens: maxTokens,
-    system: system ?? LILITH_PERSONA,
-    messages: [{ role: "user", content: userPrompt }],
-  });
-  const block = msg.content[0];
-  if (!block || block.type !== "text") return "";
-  return block.text.trim();
+  const { system, userPrompt, maxTokens = 600, model = "gemini-2.5-flash" } = opts;
+  try {
+    const res = await gemini.models.generateContent({
+      model,
+      contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+      config: {
+        systemInstruction: system ?? LILITH_PERSONA,
+        maxOutputTokens: maxTokens,
+        temperature: 0.95,
+      },
+    });
+    return (res.text ?? "").trim();
+  } catch (err) {
+    console.error("[gemini] generateText error:", err);
+    return "";
+  }
 }
+
+export const anthropic = gemini;
