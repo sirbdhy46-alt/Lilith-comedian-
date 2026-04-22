@@ -15,7 +15,7 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml tsconfig.base.json ./
 COPY bot/lilithai/package.json ./bot/lilithai/
 
-RUN pnpm install --filter @workspace/lilithai-bot... --frozen-lockfile
+RUN pnpm install --filter @workspace/lilithai-bot... --no-frozen-lockfile --ignore-scripts
 
 COPY bot/lilithai ./bot/lilithai
 
