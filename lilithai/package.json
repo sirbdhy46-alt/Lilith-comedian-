@@ -1,5 +1,5 @@
 {
-  "name": "@workspace/lilithai-bot",
+  "name": "lilithai-bot",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -9,16 +9,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.32.1",
     "@discordjs/voice": "^0.18.0",
+    "@google/genai": "^1.40.0",
     "discord.js": "^14.16.3",
     "opusscript": "^0.0.8",
     "tweetnacl": "^1.0.3",
     "undici": "^6.21.0"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
-    "tsx": "catalog:",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.2"
   }
 }
